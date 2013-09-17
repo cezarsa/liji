@@ -17,6 +17,9 @@ else
 	CFLAGS += -g
 endif
 
+run_main: $(BIN_DIR)/main
+	@$(BIN_DIR)/main
+
 $(BIN_DIR)/main: $(OBJ)
 	mkdir -p $(BIN_DIR)
 	$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS)
@@ -27,3 +30,5 @@ $(OBJ_DIR)/%.o: %.c $(DEPS)
 
 clean:
 	rm -f $(OBJ_DIR)/*.o $(BIN_DIR)/main
+
+.PHONY: clean run_main
