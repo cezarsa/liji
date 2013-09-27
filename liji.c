@@ -2,7 +2,26 @@
 #include <stdio.h>
 #include <string.h>
 
-void liji_find(const char *json_str, const char *wanted_key, int wanted_len, char **result_start, int *len) {
+#define FINAL_CHECKER \
+    if (level == result_level && tmp_result) { \
+        if (!non_ws) { \
+            non_ws = current_pos - 1; \
+        } \
+        tmp_len = non_ws - tmp_result; \
+        *result_start = tmp_result; \
+        *len = tmp_len; \
+        return; \
+    } \
+    non_ws = NULL; \
+
+void liji_find_multi(
+    const char *json_str,
+    const char *wanted_keys[],
+    int wanted_lens[],
+    int number_of_keys,
+    char **result_start,
+    int *len)
+{
     char *current_pos = (char *)json_str;
 
     char val, *key_start = 0, *tmp_result = 0, *non_ws = 0;
@@ -10,7 +29,8 @@ void liji_find(const char *json_str, const char *wanted_key, int wanted_len, cha
     int level = 0,
         result_level = 0,
         key_len = 0,
-        tmp_len = 0;
+        tmp_len = 0,
+        current_key = 0;
 
     char in_dict = 0,
          in_string = 0,
@@ -27,8 +47,10 @@ void liji_find(const char *json_str, const char *wanted_key, int wanted_len, cha
                     tmp_result++;
                     continue;
                 }
+                if (!non_ws) {
+                    non_ws = current_pos - 1;
+                }
             } else {
-                non_ws = current_pos - 1;
                 skipping = 0;
             }
         }
@@ -43,24 +65,17 @@ void liji_find(const char *json_str, const char *wanted_key, int wanted_len, cha
 
             case '}':
                 in_dict = 0;
-                if (level == result_level && tmp_result) {
-                   tmp_len = non_ws - tmp_result;
-                   *result_start = tmp_result;
-                   *len = tmp_len;
-                   return;
-                }
             case ']':
+                FINAL_CHECKER;
                 --level;
+                if (current_key > 0) {
+                    --current_key;
+                }
                 break;
             case ',':
                 key_start = 0;
                 key_len = 0;
-                if (level == result_level && tmp_result) {
-                   tmp_len = non_ws - tmp_result;
-                   *result_start = tmp_result;
-                   *len = tmp_len;
-                   return;
-                }
+                FINAL_CHECKER;
                 break;
             case ':':
                 if (in_key && !tmp_result) {
@@ -74,15 +89,18 @@ void liji_find(const char *json_str, const char *wanted_key, int wanted_len, cha
                     key_start = current_pos;
                 } else if (!key_len) {
                     key_len = current_pos - 1 - key_start;
-                    // printf("key: ");
-                    // fwrite(key_start, key_len, 1, stdout);
-                    // printf("\n");
-                    if (key_len == wanted_len && memcmp(key_start, wanted_key, key_len) == 0) {
-                        in_key = 1;
+                    if (key_len == wanted_lens[current_key] && memcmp(key_start, wanted_keys[current_key], key_len) == 0) {
+                        ++current_key;
+                        if (current_key == number_of_keys) {
+                            in_key = 1;
+                        }
                     }
                 }
                 break;
         }
-        // printf("level: %d\n", level);
     }
+}
+
+void liji_find(const char *json_str, const char *wanted_key, int wanted_len, char **result_start, int *len) {
+    liji_find_multi(json_str, (const char**) &wanted_key, (int*) &wanted_len, 1, result_start, len);
 }
