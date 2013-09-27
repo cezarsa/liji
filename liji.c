@@ -35,9 +35,15 @@ void liji_find_multi(
     char in_dict = 0,
          in_string = 0,
          in_key = 0,
-         skipping = 1;
+         skipping = 1,
+         escaped = 0;
 
     while ((val = *(current_pos++)) != 0) {
+        if (val == '\\' && !escaped) {
+            escaped = 1;
+        } else if(escaped) {
+            escaped = (escaped + 1) % 3;
+        }
         if (val != '"' && in_string) {
             continue;
         }
@@ -84,6 +90,9 @@ void liji_find_multi(
                 }
                 break;
             case '"':
+                if (escaped) {
+                    break;
+                }
                 in_string = !in_string;
                 if (!key_start) {
                     key_start = current_pos;

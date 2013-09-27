@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define JSON "{ \"test\":\"value\", \"other{\": {\"s]omething\": \"aaa\", \"bbbb\": 1}, \"yet_another\":    999   , \"deep\":{\"really\":{\"deep\":7}}, \"with\\\"quoted\": 66, \"after_quoted\": \"ok\"}"
+#define JSON "{ \"test\":\"value\", \"other{\": {\"s]omething\": \"aaa\", \"bbbb\": 1}, \"yet_another\":    999   , \"deep\":{\"really\":{\"deep\":7}}, \"with\\\"quoted\": 66, \"after_quoted\": \"ok\", \"value_quoted\": \"quo\\\"ted\"}"
 
 #define ASSERT_EQ(str1, len1, str2, len2) \
     if (len1 == len2 && memcmp(str1, str2, len1) == 0) { \
@@ -42,11 +42,11 @@ int main(int argc, char *argv[]) {
     test_simple_find(JSON, "deep", "{\"really\":{\"deep\":7}}");
     test_simple_find(JSON, "with\\\"quoted", "66");
     test_simple_find(JSON, "after_quoted", "\"ok\"");
+    test_simple_find(JSON, "value_quoted", "\"quo\\\"ted\"");
     test_find_multi(JSON, (char *[]){ "other{", "s]omething" }, 2, "\"aaa\"");
     test_find_multi(JSON, (char *[]){ "other{", "bbbb" }, 2, "1");
     test_find_multi(JSON, (char *[]){ "other{", "yet_another" }, 2, "");
     test_find_multi(JSON, (char *[]){ "deep", "really", "deep" }, 3, "7");
-
 
     return 0;
 }
