@@ -2,7 +2,7 @@ CC ?= gcc
 
 INCLUDE_DIR = .
 
-CFLAGS += -I$(INCLUDE_DIR) -Wall -Werror
+CFLAGS += -I$(INCLUDE_DIR) -Wall -Werror -Wextra -Wno-unused-parameter
 LDFLAGS += -lm
 
 OBJ_DIR = obj

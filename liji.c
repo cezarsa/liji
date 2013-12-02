@@ -117,6 +117,6 @@ int liji_find_multi_state(liji_state *state)
 
 
 liji_state liji_init(char *json_str, int json_str_len, char *wanted_keys[], int wanted_lens[], int number_of_keys) {
-    liji_state state = {json_str, json_str_len, wanted_keys, wanted_lens, number_of_keys, {0}, {0}};
+    liji_state state = {json_str, json_str_len, wanted_keys, wanted_lens, number_of_keys, {0, 0}, {0, 0, 0, {0}}};
     return state;
 }

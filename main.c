@@ -4,7 +4,7 @@
 #include <string.h>
 
 #define ASSERT_STR_EQ(str1, len1, str2, len2, line) \
-    if (len1 == len2 && memcmp(str1, str2, len1) == 0) { \
+    if ((int)len1 == (int)len2 && memcmp(str1, str2, len1) == 0) { \
         printf("Yay!\n"); \
     } else { \
         printf("Nope: '%s' - Expected: '%s'. Line: %d\n", strndup(str1, len1), strndup(str2, len2), line); \
