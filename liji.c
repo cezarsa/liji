@@ -2,43 +2,46 @@
 #include <stdio.h>
 #include <string.h>
 
-#define FINAL_CHECKER \
+#define FINAL_CHECKER(level) \
     if (level == result_level && tmp_result) { \
         if (!non_ws) { \
             non_ws = current_pos - 1; \
         } \
-        tmp_len = non_ws - tmp_result; \
-        *result_start = tmp_result; \
-        *len = tmp_len; \
-        return; \
+        int tmp_len = non_ws - tmp_result; \
+        state->response.result_start = tmp_result; \
+        state->response.len = tmp_len; \
+        parse_state->position += tmp_len; \
+        return 1; \
     } \
     non_ws = NULL; \
 
-void liji_find_multi(
-    const char *json_str,
-    const char *wanted_keys[],
-    int wanted_lens[],
-    int number_of_keys,
-    char **result_start,
-    int *len)
+
+int liji_find_multi_state(liji_state *state)
 {
-    char *current_pos = (char *)json_str;
+    liji_parse_state *parse_state = &(state->parse_state);
 
-    char val, *key_start = 0, *tmp_result = 0, *non_ws = 0;
+    if (parse_state->position >= state->json_str_len) {
+        return 0;
+    }
 
-    int level = 0,
-        result_level = 0,
+    char *current_pos = (char *)(state->json_str + parse_state->position), val;
+
+    char *key_start = 0, *tmp_result = 0, *non_ws = 0;
+
+    int result_level = 0,
         key_len = 0,
-        tmp_len = 0,
-        current_key = 0;
+        tmp_level;
 
-    char in_dict = 0,
-         in_string = 0,
+    char in_string = 0,
          in_key = 0,
          skipping = 1,
          escaped = 0;
 
-    while ((val = *(current_pos++)) != 0) {
+    memset(&(state->response), 0, sizeof(liji_response));
+
+    while (parse_state->position++ < state->json_str_len) {
+        val = *(current_pos++);
+
         if (val == '\\' && !escaped) {
             escaped = 1;
         } else if(escaped) {
@@ -48,7 +51,7 @@ void liji_find_multi(
             continue;
         }
         if (tmp_result) {
-            if (val == ' ') {
+            if (val == ' ' || val == '\n' || val == '\r' || val == '\t') {
                 if (skipping) {
                     tmp_result++;
                     continue;
@@ -64,29 +67,27 @@ void liji_find_multi(
             case '{':
                 key_start = 0;
                 key_len = 0;
-                in_dict = 1;
             case '[':
-                ++level;
+                ++parse_state->level;
                 break;
 
             case '}':
-                in_dict = 0;
             case ']':
-                FINAL_CHECKER;
-                --level;
-                if (current_key > 0) {
-                    --current_key;
+                tmp_level = parse_state->level--;
+                if (parse_state->level_wanted_map[parse_state->level]) {
+                    --parse_state->current_key;
                 }
+                FINAL_CHECKER(tmp_level);
                 break;
             case ',':
                 key_start = 0;
                 key_len = 0;
-                FINAL_CHECKER;
+                FINAL_CHECKER(parse_state->level);
                 break;
             case ':':
                 if (in_key && !tmp_result) {
                     tmp_result = current_pos;
-                    result_level = level;
+                    result_level = parse_state->level;
                 }
                 break;
             case '"':
@@ -98,18 +99,24 @@ void liji_find_multi(
                     key_start = current_pos;
                 } else if (!key_len) {
                     key_len = current_pos - 1 - key_start;
-                    if (key_len == wanted_lens[current_key] && memcmp(key_start, wanted_keys[current_key], key_len) == 0) {
-                        ++current_key;
-                        if (current_key == number_of_keys) {
+                    if (key_len == state->wanted_lens[parse_state->current_key] && memcmp(key_start, state->wanted_keys[parse_state->current_key], key_len) == 0) {
+                        ++parse_state->current_key;
+                        parse_state->level_wanted_map[parse_state->level] = 1;
+                        if (parse_state->current_key == state->number_of_keys) {
                             in_key = 1;
+                            --parse_state->current_key;
                         }
                     }
                 }
                 break;
         }
     }
+
+    return 0;
 }
 
-void liji_find(const char *json_str, const char *wanted_key, int wanted_len, char **result_start, int *len) {
-    liji_find_multi(json_str, (const char**) &wanted_key, (int*) &wanted_len, 1, result_start, len);
+
+liji_state liji_init(char *json_str, int json_str_len, char *wanted_keys[], int wanted_lens[], int number_of_keys) {
+    liji_state state = {json_str, json_str_len, wanted_keys, wanted_lens, number_of_keys, {0}, {0}};
+    return state;
 }

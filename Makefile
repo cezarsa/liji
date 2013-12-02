@@ -11,6 +11,8 @@ BIN_DIR = bin
 DEPS = liji.h
 OBJ = $(OBJ_DIR)/liji.o $(OBJ_DIR)/main.o
 
+DEBUG = 1
+
 ifndef DEBUG
 	CFLAGS += -m64 -march=core2 -O3
 else
