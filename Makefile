@@ -41,4 +41,4 @@ python:
 bench: python
 	cd ./python && PYTHONPATH=. python liji/benchmark.py
 
-.PHONY: clean test build python
+.PHONY: clean test build python bench
