@@ -14,7 +14,7 @@
       "image_url_original": "http://zzz.yy/a/b",
       "user": {
         "is_editor": false,
-        "picture": "http://www.xxx.yyy",
+        "picture": "http://www.xxx.yyy/1",
         "name": "xxxx yyyy"
       },
       "group": {
@@ -28,7 +28,7 @@
       "type": "Comment",
       "user": {
         "is_editor": false,
-        "picture": "http://a.b.c.d/a/b",
+        "picture": "http://www.xxx.yyy/2",
         "name": "xxxx yyyy"
       }
     },
@@ -44,7 +44,7 @@
       "type": "Comment",
       "user": {
         "is_editor": false,
-        "picture": "http://a.b.c.d/a/b",
+        "picture": "http://www.xxx.yyy/3",
         "name": "xxxx yyyy"
       },
       "group": {
@@ -64,7 +64,7 @@
       "type": "Comment",
       "user": {
         "is_editor": false,
-        "picture": "http://a.b.c.d/a/b",
+        "picture": "http://www.xxx.yyy/4",
         "name": "kkkkkk"
       },
       "group": {

@@ -58,7 +58,8 @@ int main(int argc, char *argv[]) {
         read_json("fixtures/edge.json"),
         read_json("fixtures/repeated_keys.json"),
         read_json("fixtures/arrays.json"),
-        read_json("fixtures/bigone.json"),
+        read_json("fixtures/other.json"),
+        read_json("fixtures/bigone.json")
     };
 
     test_simple_find(json[0], "yet_another", "999", __LINE__);
@@ -84,6 +85,14 @@ int main(int argc, char *argv[]) {
 
     test_find_many(json[2], (char *[]){ "title" }, 1, (char *[]){ "1", "2", "3" }, 3, __LINE__);
     test_find_many(json[2], (char *[]){ "key", "title" }, 2, (char *[]){ "1", "2", "3" }, 3, __LINE__);
+    test_find_many(json[3], (char *[]){ "created_at" }, 1, (char *[]){
+        "\"21/11/2013 \xc3\xa0s 15:44\"",
+        "\"21/11/2013 \xc3\xa0s 15:44\"",
+        "\"21/11/2013 \xc3\xa0s 17:04\"",
+        "\"21/11/2013 \xc3\xa0s 17:12\"",
+        "\"21/11/2013 \xc3\xa0s 17:15\"",
+        "\"21/11/2013 \xc3\xa0s 17:21\""
+    }, 6, __LINE__);
 
     return 0;
 }

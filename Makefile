@@ -19,8 +19,10 @@ else
 	CFLAGS += -g
 endif
 
-run_main: $(BIN_DIR)/main
+test: $(BIN_DIR)/main
 	@$(BIN_DIR)/main
+
+build: $(BIN_DIR)/main
 
 $(BIN_DIR)/main: $(OBJ)
 	mkdir -p $(BIN_DIR)
@@ -33,4 +35,10 @@ $(OBJ_DIR)/%.o: %.c $(DEPS)
 clean:
 	rm -f $(OBJ_DIR)/*.o $(BIN_DIR)/main
 
-.PHONY: clean run_main
+python:
+	cd ./python && PYTHONPATH=. python setup.py build_ext -i
+
+bench: python
+	cd ./python && PYTHONPATH=. python liji/benchmark.py
+
+.PHONY: clean test build python

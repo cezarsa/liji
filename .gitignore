@@ -1,2 +1,6 @@
 bin/
 obj/
+*.pyc
+.DS_Store
+*.so
+python/build/

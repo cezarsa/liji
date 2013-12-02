@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
+
 #define FINAL_CHECKER(level) \
     if (level == result_level && tmp_result) { \
         if (!non_ws) { \
@@ -10,7 +11,6 @@
         int tmp_len = non_ws - tmp_result; \
         state->response.result_start = tmp_result; \
         state->response.len = tmp_len; \
-        parse_state->position += tmp_len; \
         return 1; \
     } \
     non_ws = NULL; \
