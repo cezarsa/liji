@@ -27,8 +27,6 @@ setup(
     packages=['liji'],
     package_dir={"liji": "liji"},
     include_package_data=True,
-    install_requires=[
-    ],
     ext_modules=[
         Extension('liji.ext._liji',
                   ['liji/ext/_liji.c', 'lib/liji.c'],
