@@ -3,8 +3,8 @@ import ujson
 import json
 from datetime import datetime
 
-COUNT = 500000
-jsondata = open('../fixtures/bigone.json').read()
+COUNT = 100000
+jsondata = open('../fixtures/reallybigone.json').read()
 
 
 def with_liji():
