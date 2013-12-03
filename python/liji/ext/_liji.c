@@ -28,7 +28,7 @@ _liji_inspect(PyObject *self, PyObject *args)
 
     liji_state state = liji_init((char *)json, json_len, str_keys, str_sizes, keys_len);
 
-    PyObject *result_list = PyList_New(0);
+    PyObject *result_list = PyList_New(2);
     while (liji_find_multi_state(&state)) {
         PyObject *py_str = PyString_FromStringAndSize(state.response.result_start, state.response.len);
         PyList_Append(result_list, py_str);

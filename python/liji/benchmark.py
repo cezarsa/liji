@@ -21,7 +21,13 @@ def with_json():
     [ev.get('user', {}).get('picture', None) for ev in parsed['events']]
 
 
-for func in [with_liji, with_ujson]:  # , with_json]:
+test_funcs = [
+    with_liji,
+    with_ujson,
+    # with_json,
+]
+
+for func in test_funcs:
     t0 = datetime.now()
     for i in xrange(COUNT):
         func()

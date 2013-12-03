@@ -73,6 +73,10 @@ int liji_find_multi_state(liji_state *state)
                 key_len = 0;
             case '[':
                 ++parse_state->level;
+                if (unlikely(parse_state->level >= LIJI_MAX_LEVELS)) {
+                    fprintf(stderr, "[LIJI ERROR] Too deeply nested json\n");
+                    return 0;
+                }
                 break;
 
             case '}':

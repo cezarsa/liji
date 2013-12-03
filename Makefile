@@ -22,6 +22,8 @@ endif
 test: build
 	@$(BIN_DIR)/main
 
+all: python build
+
 build: $(BIN_DIR)/main
 
 $(BIN_DIR)/main: $(OBJ)
@@ -34,6 +36,8 @@ $(OBJ_DIR)/%.o: %.c $(DEPS)
 
 clean:
 	rm -f $(OBJ_DIR)/*.o $(BIN_DIR)/main
+	rm -rf ./python/build
+	find ./python -name "*.so" -delete
 
 python:
 	cd ./python && PYTHONPATH=. python setup.py build_ext -i
