@@ -9,7 +9,7 @@ if not 'CFLAGS' in os.environ:
 
 setup(
     name='liji',
-    version='0.1.0',
+    version='0.1.1',
     description="liji",
     keywords='json',
     author='globo.com',
