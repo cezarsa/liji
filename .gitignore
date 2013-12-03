@@ -4,3 +4,5 @@ obj/
 .DS_Store
 *.so
 python/build/
+python/dist/
+python/liji.egg-info/
