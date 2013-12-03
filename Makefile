@@ -42,6 +42,9 @@ clean:
 python:
 	cd ./python && PYTHONPATH=. python setup.py build_ext -i
 
+python_dist: test
+	cd ./python && PYTHONPATH=. python setup.py sdist upload
+
 bench: python
 	cd ./python && PYTHONPATH=. python liji/benchmark.py
 

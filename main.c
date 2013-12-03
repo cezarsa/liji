@@ -3,10 +3,13 @@
 #include <stdio.h>
 #include <string.h>
 
+static int has_error = 0;
+
 #define ASSERT_STR_EQ(str1, len1, str2, len2, line) \
     if ((int)len1 == (int)len2 && memcmp(str1, str2, len1) == 0) { \
         printf("Yay!\n"); \
     } else { \
+        has_error = 1; \
         printf("Nope: '%s' - Expected: '%s'. Line: %d\n", strndup(str1, len1), strndup(str2, len2), line); \
     }
 
@@ -14,6 +17,7 @@
     if (v1 == v2) { \
         printf("Yay!\n"); \
     } else { \
+        has_error = 1; \
         printf("Nope. Expected %d to equal %d. Line: %d\n", v1, v2, line); \
     }
 
@@ -94,5 +98,5 @@ int main(int argc, char *argv[]) {
         "21/11/2013 \xc3\xa0s 17:21"
     }, 6, __LINE__);
 
-    return 0;
+    return has_error;
 }
