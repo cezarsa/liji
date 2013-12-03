@@ -19,7 +19,7 @@ else
 	CFLAGS += -g
 endif
 
-test: $(BIN_DIR)/main
+test: build
 	@$(BIN_DIR)/main
 
 build: $(BIN_DIR)/main

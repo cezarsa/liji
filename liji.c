@@ -9,6 +9,10 @@
             non_ws = current_pos - 1; \
         } \
         int tmp_len = non_ws - tmp_result; \
+        if (*tmp_result == '"') { \
+            ++tmp_result; \
+            tmp_len -= 2; \
+        } \
         state->response.result_start = tmp_result; \
         state->response.len = tmp_len; \
         return 1; \

@@ -1,20 +1,29 @@
 from liji.ext._liji import inspect
 import ujson
+import json
 from datetime import datetime
 
 COUNT = 500000
-t0 = datetime.now()
+jsondata = open('../fixtures/bigone.json').read()
 
-for i in xrange(COUNT):
-    jsondata = open('../fixtures/bigone.json').read()
+
+def with_liji():
     inspect(jsondata, ["events", "picture"])
 
-t = datetime.now() - t0
-print t
 
-for i in xrange(COUNT):
+def with_ujson():
     parsed = ujson.loads(jsondata)
-    [item.get('user', {}).get('picture', None) for item in parsed['events']]
+    [ev.get('user', {}).get('picture', None) for ev in parsed['events']]
 
-t = datetime.now() - t0
-print t
+
+def with_json():
+    parsed = json.loads(jsondata)
+    [ev.get('user', {}).get('picture', None) for ev in parsed['events']]
+
+
+for func in [with_liji, with_ujson]:  # , with_json]:
+    t0 = datetime.now()
+    for i in xrange(COUNT):
+        func()
+    t = datetime.now() - t0
+    print "%s - %s" % (func.__name__, t)

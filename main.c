@@ -63,15 +63,15 @@ int main(int argc, char *argv[]) {
     };
 
     test_simple_find(json[0], "yet_another", "999", __LINE__);
-    test_simple_find(json[0], "test", "\"value\"", __LINE__);
-    test_simple_find(json[0], "s]omething", "\"aaa\"", __LINE__);
+    test_simple_find(json[0], "test", "value", __LINE__);
+    test_simple_find(json[0], "s]omething", "aaa", __LINE__);
     test_simple_find(json[0], "other{", "{\"s]omething\": \"aaa\", \"bbbb\": 1}", __LINE__);
     test_simple_find(json[0], "deep", "{\"really\":{\"deep\":7}}", __LINE__);
     test_simple_find(json[0], "really", "{\"deep\":7}", __LINE__);
     test_simple_find(json[0], "with\\\"quoted", "66", __LINE__);
-    test_simple_find(json[0], "after_quoted", "\"ok\"", __LINE__);
-    test_simple_find(json[0], "value_quoted", "\"quo\\\"ted\"", __LINE__);
-    test_find_multi(json[0], (char *[]){ "other{", "s]omething" }, 2, "\"aaa\"", __LINE__);
+    test_simple_find(json[0], "after_quoted", "ok", __LINE__);
+    test_simple_find(json[0], "value_quoted", "quo\\\"ted", __LINE__);
+    test_find_multi(json[0], (char *[]){ "other{", "s]omething" }, 2, "aaa", __LINE__);
     test_find_multi(json[0], (char *[]){ "other{", "bbbb" }, 2, "1", __LINE__);
     test_find_multi(json[0], (char *[]){ "deep", "really", "deep" }, 3, "7", __LINE__);
 
@@ -86,12 +86,12 @@ int main(int argc, char *argv[]) {
     test_find_many(json[2], (char *[]){ "title" }, 1, (char *[]){ "1", "2", "3" }, 3, __LINE__);
     test_find_many(json[2], (char *[]){ "key", "title" }, 2, (char *[]){ "1", "2", "3" }, 3, __LINE__);
     test_find_many(json[3], (char *[]){ "created_at" }, 1, (char *[]){
-        "\"21/11/2013 \xc3\xa0s 15:44\"",
-        "\"21/11/2013 \xc3\xa0s 15:44\"",
-        "\"21/11/2013 \xc3\xa0s 17:04\"",
-        "\"21/11/2013 \xc3\xa0s 17:12\"",
-        "\"21/11/2013 \xc3\xa0s 17:15\"",
-        "\"21/11/2013 \xc3\xa0s 17:21\""
+        "21/11/2013 \xc3\xa0s 15:44",
+        "21/11/2013 \xc3\xa0s 15:44",
+        "21/11/2013 \xc3\xa0s 17:04",
+        "21/11/2013 \xc3\xa0s 17:12",
+        "21/11/2013 \xc3\xa0s 17:15",
+        "21/11/2013 \xc3\xa0s 17:21"
     }, 6, __LINE__);
 
     return 0;
