@@ -3,6 +3,9 @@
 #include <Python.h>
 #include "liji.h"
 
+#define MAX_WANTED_KEYS 1024
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+
 
 static PyObject*
 _liji_inspect(PyObject *self, PyObject *args)
@@ -14,8 +17,9 @@ _liji_inspect(PyObject *self, PyObject *args)
     PyArg_ParseTuple(args, "s#O", &json, &json_len, &keys);
     keys_len = PyList_Size(keys);
 
-    int str_sizes[1024];
-    char *str_keys[1024];
+    int str_sizes[MAX_WANTED_KEYS];
+    char *str_keys[MAX_WANTED_KEYS];
+    keys_len = MIN(keys_len, MAX_WANTED_KEYS);
     for (i = 0; i < keys_len; ++i) {
         PyObject *list_item = PyList_GetItem(keys, i);
         str_sizes[i] = PyString_Size(list_item);
