@@ -1,2 +1,3 @@
 FROM golang:1.5
-RUN env
+ADD . /code
+RUN ls -la /code
